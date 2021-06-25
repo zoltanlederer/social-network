@@ -1,0 +1,75 @@
+
+{% for post in posts %}
+<div class="posts">
+    <!-- User info -->
+    <div class="d-flex justify-content-between pt-2">
+        <div class="d-flex align-items-center">            
+            <p class="avatar me-2">
+                <a class="nav-link link-secondary p-0" href="{% url 'profile' post.user_id %}">
+                <img
+                src={% if post.user.gender == 'Female' and post.user.avatarURL == 'https://none.com' %}
+                        'https://img.icons8.com/plasticine/100/000000/user-female.png'
+                    {% elif post.user.gender == 'Male' and post.user.avatarURL == 'https://none.com' %}
+                        'https://img.icons8.com/plasticine/100/000000/user.png'
+                    {% else %}
+                        '{{ post.user.avatarURL }}'
+                    {% endif %}                
+                alt="avatar">
+                </a>
+            </p>
+            <p class="name-date fw-bold me-2"><a class="nav-link link-secondary p-0" href="{% url 'profile' post.user_id %}">{{ post.user }}</a></p>
+            <p class="name-date text-muted">{{ post.created }}</p>
+        </div>
+        <div class="">
+            {% if user == post.user %}
+                <button class="btn btn-outline-warning btn-edit">Edit</button>
+                <button class="btn btn-outline-warning btn-save btn-hide">Save</button>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Posts -->
+    <div class="post" data-post-id={{ post.id }}>
+        <p>{{ post.post }}</p>
+    </div>
+    <!-- Likes -->
+    <div class="pb-2">      
+        <hr>
+        {% if post.total_likes > 0 %}
+            <i class="like-btn fas fa-heart" id={{ post.id }}></i>
+        {% else %}    
+            <i class="like-btn far fa-heart" id={{ post.id }}></i>
+        {% endif %}
+            <span class="like-count">{{ post.total_likes }}</span>
+    </div>
+</div>
+{% endfor %}
+
+
+
+{# Pagination #}
+
+<div class="d-flex justify-content-center">
+    <ul class="pagination">
+        {% if posts.has_previous %}
+        <li class="page-item page-arrow">
+            <a class="page-link page-arrow" href="?page={{ posts.previous_page_number }}" aria-label="Previous">
+                <span aria-hidden="true"><i class="fas fa-angle-double-left"></i></span>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% for i in paginator.page_range %}
+            <li class="page-item {% if i == page_number %}active{% endif %}">
+                <a class="page-link" href='?page={{ i }}'>{{ i }}</a>
+            </li>
+        {% endfor %}
+
+        {% if posts.has_next %}
+        <li class="page-item page-arrow">
+            <a class="page-link page-arrow" href="?page={{ posts.next_page_number }}" aria-label="Next">
+                <span aria-hidden="true"><i class="fas fa-angle-double-right"></i></span>
+            </a>
+        </li> 
+        {% endif %}
+    </ul>
+</div>

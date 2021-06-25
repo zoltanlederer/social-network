@@ -1,0 +1,13 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+  {% if posts %}
+      {% include './posts.html' %}
+  {% else %}
+  <div class="alert alert-primary text-center" role="alert">
+      You don't follow any user.
+    </div>
+  {% endif %}
+
+{% endblock %}

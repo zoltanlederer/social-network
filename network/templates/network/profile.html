@@ -1,0 +1,44 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+
+<div class="profile d-flex justify-content-around align-items-end mb-5">
+    <ul class="d-flex flex-column">
+        <p><strong>Full name: </strong>{{ profile.first_name }} {{ profile.last_name }}</p>
+        <p><strong>Username: </strong>{{ profile.username }}</p>
+        <p><strong>Gender: </strong>{{ profile.gender }}</p>
+    </ul>
+    <ul class="text-center">
+        <li class="avatar"><img
+            src={% if profile.gender == 'Female' and profile.avatarURL == 'https://none.com' %}
+                    'https://img.icons8.com/plasticine/100/000000/user-female.png'
+                {% elif profile.gender == 'Male' and profile.avatarURL == 'https://none.com' %}
+                    'https://img.icons8.com/plasticine/100/000000/user.png'
+                {% else %}
+                    '{{ profile.avatarURL }}'
+                {% endif %}                
+            alt="avatar"></li>
+        <li>{{ profile.username }}</li>
+        {% if user.is_authenticated and profile.username != user.username %}
+        <li data-user-id={{ profile.id }}>
+            {% if is_follow %}
+                <button class="btn btn-outline-secondary unfollow">Unfollow</button>
+                <button class="btn btn-outline-secondary follow btn-hide">Follow</button>
+            {% else %}
+                <button class="btn btn-outline-secondary unfollow btn-hide">Unfollow</button>
+                <button class="btn btn-outline-secondary follow">Follow</button>
+            {% endif %}   
+        </li>
+        {% endif %}
+    </ul>
+    <ul class="d-flex flex-column">
+        <p>Following:&nbsp;<span>{{ following }}</span></p>
+        <p>Followers:&nbsp;<span class="follower">{{ follower }}</span></p>
+        {# <li class="me-3"><button class="btn btn-outline-secondary">Following</button></li> #}
+        {# <li><button class="btn btn-outline-secondary">Followers</button></li> #}
+    </ul>
+</div>
+
+{% include './posts.html' %}
+
+{% endblock %}
